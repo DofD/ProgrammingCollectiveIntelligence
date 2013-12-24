@@ -2,7 +2,7 @@
 {
     using System;
 
-    internal class RatingFilm : IComparable, IComparable<RatingFilm>
+    public class RatingFilm : IComparable, IComparable<RatingFilm>
     {
         public override int GetHashCode()
         {
