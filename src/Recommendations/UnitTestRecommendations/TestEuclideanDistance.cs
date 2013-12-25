@@ -6,8 +6,6 @@
 
     using Recommendations;
 
-    using TypeMock.ArrangeActAssert;
-
     [TestClass]
     public class TestEuclideanDistance
     {
@@ -48,7 +46,10 @@
         [TestMethod]
         public void TestSimDistance()
         {
-            Isolate.WhenCalled(() => GetCritics()).WillReturn(this.dataTest);
+            var euclideanDistance = new EuclideanDistance(this.dataTest);
+            var distance = euclideanDistance.SimDistance("Lisa Rose", "Gene Seymour");
+
+            Assert.AreEqual(0.148148148148148, (double)distance);
         }
     }
 }

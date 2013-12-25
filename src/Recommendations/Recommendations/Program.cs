@@ -2,7 +2,6 @@
 {
     using System;
     using System.Collections.Generic;
-    using System.Linq;
 
     class Program
     {
@@ -100,48 +99,21 @@
 
             Console.Clear();
 
-            var result = 0m;
+            IDistance distance = null;
             switch (ch.KeyChar)
             {
-                case '1': result = EuclideanDistance();
+                case '1':
+                    distance = FactoryDistance.CreateDistance<EuclideanDistance>(Program.GetCritics());
                     break;
             }
 
-            Console.WriteLine(result);
-            Console.ReadKey();
-        }
-
-        private static decimal EuclideanDistance()
-        {
-            var critics = GetCritics();
-
-            var result = SimDistance(critics, "Lisa Rose", "Gene Seymour");
-
-            return result;
-        }
-
-        private static decimal SimDistance(Dictionary<string, List<RatingFilm>> prefs, string person1, string person2)
-        {
-            // Получить список предметов, оцененных обоими
-            var join = prefs[person1]
-                        .Join(
-                            prefs[person2],
-                            item1 => item1,
-                            item2 => item2,
-                            (item1, item2) => new { nameFilm = item1.FilmName, rating1 = item1.Rating, rating2 = item2.Rating })
-                        .ToList();
-
-            // Если нет ни одной общей оценки, вернуть 0
-            if (join.Count == 0)
+            if (distance != null)
             {
-                return 0m;
+                var result = distance.SimDistance("Lisa Rose", "Gene Seymour");
+                Console.WriteLine("Результат = {0}", result);
             }
 
-            // Получим сумму квадратов разностей
-            var sum = join.Sum(item => Math.Pow((double)(item.rating1 - item.rating2), 2));
-
-            //return (decimal)(1 / (1 + Math.Sqrt(sum)));
-            return (decimal)(1 / (1 + sum));
+            Console.ReadKey();
         }
     }
 }
