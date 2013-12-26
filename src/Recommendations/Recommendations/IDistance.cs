@@ -1,7 +1,7 @@
 ﻿namespace Recommendations
 {
     /// <summary>
-    /// Интерфейс вычислитель растояния
+    /// Интерфейс вычислитель расстояния
     /// </summary>
     public interface IDistance
     {

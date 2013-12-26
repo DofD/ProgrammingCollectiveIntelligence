@@ -55,6 +55,7 @@
   <ItemGroup>
     <Compile Include="TestEuclideanDistance.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="TestCorrelationPearson.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Recommendations\Recommendations.csproj">

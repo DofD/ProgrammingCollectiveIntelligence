@@ -5,19 +5,19 @@
     using System.Linq;
 
     /// <summary>
-    /// Класс считающий Евклидово растояние
+    /// Класс вычисляющий Евклидово расстояние
     /// </summary>
     public class EuclideanDistance : IDistance
     {
         /// <summary>
-        /// Набор отценок критиков
+        /// Набор оценок критиков
         /// </summary>
         private readonly Dictionary<string, List<RatingFilm>> prefs;
 
         /// <summary>
         /// Конструктор
         /// </summary>
-        /// <param name="prefs">Набор отценок критиков</param>
+        /// <param name="prefs">Набор оценок критиков</param>
         public EuclideanDistance(Dictionary<string, List<RatingFilm>> prefs)
         {
             this.prefs = prefs;
@@ -50,7 +50,7 @@
             var sum = join.Sum(item => Math.Pow((double)(item.rating1 - item.rating2), 2));
 
             //return (decimal)(1 / (1 + Math.Sqrt(sum)));
-            return (decimal)(1 / (1 + sum));
+            return (decimal)(1 / (1 + sum)); // В книге почему то упустили квадратный корень
         }
     }
 }

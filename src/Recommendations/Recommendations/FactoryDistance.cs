@@ -4,12 +4,12 @@
     using System.Collections.Generic;
 
     /// <summary>
-    /// Фабрика создания вычислителей растояний
+    /// Фабрика создания вычислителей расстояний
     /// </summary>
     internal static class FactoryDistance
     {
         /// <summary>
-        /// Создает указаный вычислитель
+        /// Создает указанный вычислитель
         /// </summary>
         /// <typeparam name="T">Тип вычислителя</typeparam>
         /// <param name="critics">Список критиков</param>

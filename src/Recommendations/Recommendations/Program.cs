@@ -105,6 +105,9 @@
                 case '1':
                     distance = FactoryDistance.CreateDistance<EuclideanDistance>(Program.GetCritics());
                     break;
+                case '2':
+                    distance = FactoryDistance.CreateDistance<CorrelationPearson>(Program.GetCritics());
+                    break;
             }
 
             if (distance != null)
