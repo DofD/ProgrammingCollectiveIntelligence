@@ -16,7 +16,18 @@
         /// <returns>Новый вычислитель</returns>
         public static IDistance CreateDistance<T>(Dictionary<string, List<RatingFilm>> critics) where T : IDistance
         {
-            return (IDistance)Activator.CreateInstance(typeof(T), critics);
+            return FactoryDistance.CreateDistance(typeof(T), critics);
+        }
+
+        /// <summary>
+        /// Создает указанный вычислитель
+        /// </summary>
+        /// <param name="typeDistance">Тип вычислителя</param>
+        /// <param name="critics">Список критиков</param>
+        /// <returns>Новый вычислитель</returns>
+        public static IDistance CreateDistance(Type typeDistance, Dictionary<string, List<RatingFilm>> critics)
+        {
+            return (IDistance)Activator.CreateInstance(typeDistance, critics); 
         }
     }
 }

@@ -2,6 +2,8 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.IO;
+    using System.Linq;
 
     class Program
     {
@@ -93,6 +95,8 @@
         {
             Console.WriteLine("[1] Евклидово расстояние");
             Console.WriteLine("[2] Корреляции Пирсона");
+            Console.WriteLine("[3] Ранжирование критиков 'Евклидово расстояние'");
+            Console.WriteLine("[4] Ранжирование критиков 'Корреляции Пирсона'");
             Console.WriteLine("[другое] Выход");
 
             var ch = Console.ReadKey();
@@ -108,6 +112,12 @@
                 case '2':
                     distance = FactoryDistance.CreateDistance<CorrelationPearson>(Program.GetCritics());
                     break;
+                case '3':
+                    Program.RankingCritics(typeof(EuclideanDistance), Console.In, Console.Out);
+                    break;
+                case '4':
+                    Program.RankingCritics(typeof(CorrelationPearson), Console.In, Console.Out);
+                    break;
             }
 
             if (distance != null)
@@ -117,6 +127,77 @@
             }
 
             Console.ReadKey();
+        }
+
+        private static void RankingCritics(Type typeSimilarity, TextReader inTextReader, TextWriter outTextWriter)
+        {
+            const string myName = "My";
+
+            outTextWriter.WriteLine("Введите количество критиков:");
+            int count;
+
+            do
+            {
+                var line = inTextReader.ReadLine();
+                int.TryParse(line, out count);
+
+                if (count <= 0)
+                {
+                    outTextWriter.WriteLine("Число должно быть больше 0");
+                }
+            }
+            while (count == 0);
+
+            var ratingFilms = new List<RatingFilm>();
+            outTextWriter.WriteLine("Введите рейтинг фильмов (имя фильма / оценку [Y - закончить]");
+
+            string rayingStr;
+            do
+            {
+                rayingStr = inTextReader.ReadLine();
+
+                if (rayingStr != null)
+                {
+                    var ratingParse = rayingStr.Split('/');
+
+                    if (ratingParse.Length == 2)
+                    {
+                        decimal rating;
+                        decimal.TryParse(ratingParse[1], out rating);
+
+                        ratingFilms.Add(new RatingFilm(ratingParse[0], rating));
+                    }
+                }
+            }
+            while (rayingStr != "Y");
+
+            var prefs = Program.GetCritics();
+            prefs.Add(myName, ratingFilms);
+
+            foreach (var rating in Program.TopMatches(prefs, myName, typeSimilarity, count))
+            {
+                outTextWriter.WriteLine("({0} {1})", rating.Value, rating.Key);
+            }
+
+        }
+
+        /// <summary>
+        /// Возвращает список наилучших соответствий для человека из словаря prefs.
+        /// </summary>
+        /// <param name="prefs">Список оценок</param>
+        /// <param name="person">Имя критика для которого происходит сравнение</param>
+        /// <param name="typeSimilarity">Тип функции подобия</param>
+        /// <param name="n">Количество результатов в списке</param>
+        /// <returns>Список результатов</returns>
+        private static IEnumerable<KeyValuePair<string, decimal>> TopMatches(Dictionary<string, List<RatingFilm>> prefs, string person, Type typeSimilarity, int n = 5)
+        {
+            var similarity = FactoryDistance.CreateDistance(typeSimilarity, prefs);
+
+            return prefs.Where(rec => rec.Key != person)
+                .Select(pref => new KeyValuePair<string, decimal>(pref.Key, similarity.SimDistance(pref.Key, person)))
+                .OrderByDescending(x => x.Value)
+                .Take(n)
+                .ToList();
         }
     }
 }
