@@ -49,7 +49,7 @@
             var correlationPearson = new CorrelationPearson(this.dataTest);
             var distance = correlationPearson.SimDistance("Lisa Rose", "Gene Seymour");
 
-            Assert.AreEqual(0.396059017191, (double)distance);
+            Assert.AreEqual(0.396059017191, (double)distance, 0.0000000000005);
         }
     }
 }
