@@ -199,5 +199,31 @@
                 .Take(n)
                 .ToList();
         }
+
+        private static IEnumerable<KeyValuePair<string, decimal>> GetRecommendations(Dictionary<string, List<RatingFilm>> prefs, string person, Type typeSimilarity)
+        {
+            var result = new List<KeyValuePair<string, decimal>>();
+
+            var similarity = FactoryDistance.CreateDistance(typeSimilarity, prefs);
+
+            foreach (var pref in prefs.Where(rec => rec.Key != person))
+            {
+                var sim = similarity.SimDistance(person, pref.Key);
+
+                // Игнорировать нулевые и отрицательные оценки
+                if (sim <= 0)
+                {
+                    continue;
+                }
+
+                // Оценивать только фильмы, которые я еще не смотрел
+                foreach (var ratingFilms in pref.Value.Where(item => !prefs[person].Contains(item) || prefs[person].Find(x => x  == item).Rating == 0))
+                {
+                    
+                }
+            }
+
+            return result;
+        }
     }
 }
